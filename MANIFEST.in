@@ -1,0 +1,3 @@
+include VERSION Makefile README.md README.rst LICENSE requirements.txt
+recursive-include suffixtree *.py
+include test/*.py
