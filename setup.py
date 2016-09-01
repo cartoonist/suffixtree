@@ -20,6 +20,25 @@ KEYWORDS = ['suffix', 'tree', 'indexing', 'data structure']
 REQUIRES = ['graphviz==0.4.10']
 AUTHOR = "Ali Ghaffaari"
 EMAIL = "ali.ghaffaari@gmail.com"
+CLASSIFIERS = [
+    # Project maturity:
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    'Development Status :: 3 - Alpha',
+
+    # License
+    'License :: OSI Approved :: MIT License',
+
+    # Supported Python versions.
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+
+    # Others
+    'Intended Audience :: Science/Research',
+    'Topic :: Text Processing :: Indexing',
+]
 
 setup(
     name=PYPI_DISTNAME,
@@ -31,6 +50,6 @@ setup(
     url=VCS_URL,
     download_url=TAR_URL,
     keywords=KEYWORDS,
-    classifiers=[],
+    classifiers=CLASSIFIERS,
     install_requires=REQUIRES,
 )
