@@ -304,13 +304,11 @@ class SuffixTree(Tree):
             construction.
         """
         super().__init__(**tree_options)
-        self._string = string
-        self._case_sensitive = case_sensitive
+        self._abstract = False
         # If `string` is not provided (None), this object would be a non-root
         # (internal or leaf) node; i.e. an abstract node. So there's no need to
         # call construct function.
-        self._abstract = False
-        if self._string is None:
+        if string is None:
             self._abstract = True
 
         # The substring represented by this node (by tree-as-a-node perspective)
@@ -318,8 +316,11 @@ class SuffixTree(Tree):
 
         if not self._abstract:
             # Processing the string...
-            if not case_sensitive:
-                self._string = self._string.lower()
+            self._case_sensitive = case_sensitive
+            if case_sensitive:
+                self._string = string
+            else:
+                self._string = string.lower()
             self._string += SuffixTree.sentinel
             # Suffix link for root node is None.
             self.suffix_link = None
@@ -328,8 +329,6 @@ class SuffixTree(Tree):
             # Construct the suffix tree!
             self._construct()
         else:
-            # `string` is None, so the same is `case-sensitive`.
-            self._case_sensitive = None
             self.suffix_link = suffix_link
 
     @classmethod
@@ -533,17 +532,15 @@ class SuffixTree(Tree):
     @property
     def string(self):
         """Read-only property returns corresponding string."""
-        if self._string is None and not self.is_root():
-            self._string = self.parent_edge.src.string
-
+        if not self.is_root():
+            return self.parent_edge.src.string
         return self._string
 
     @property
     def case_sensitive(self):
         """Read-only property returns if the string is case sensitive or not."""
-        if self._case_sensitive is None and not self.is_root():
-            self._case_sensitive = self.parent_edge.src.case_sensitive
-
+        if not self.is_root():
+            return self.parent_edge.src.case_sensitive
         return self._case_sensitive
 
     @property
