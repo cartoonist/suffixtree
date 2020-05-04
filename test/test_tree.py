@@ -1,37 +1,23 @@
-#!/usr/bin/env python3
 # coding=utf-8
 
-# Suffix tree library
-#
-# The MIT License (MIT)
-#
-# Copyright (c) 2016 Ali Ghaffaari
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+"""
+    test.test_tree
+    ~~~~~~~~~~~~~~
 
-"""Test Tree class."""
+    Test Tree class.
+
+    :copyright: (c) 2016 by Ali Ghaffaari.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from os import path
 import random
 import string
+
 from nose.tools import raises
-from context import Tree, Edge
+
+from .context import suffixtree as st
+
 
 CWDIR = path.dirname(path.realpath(__file__))
 VIEW = False
@@ -40,29 +26,29 @@ VIEW = False
 def test_edge():
     """Test Edge class."""
     # Testing `is_dangling` and `is_loop` functoins
-    edge1 = Edge(1, "An edge")
+    edge1 = st.Edge(1, "An edge")
     assert edge1.is_dangling()
     assert not edge1.is_loop()
     edge1.src = 0
     assert not edge1.is_dangling()
-    edge2 = Edge(2, 12, 1)
+    edge2 = st.Edge(2, 12, 1)
     assert not edge2.is_dangling()
-    edge3 = Edge(2, src=2)
+    edge3 = st.Edge(2, src=2)
     assert edge3.is_loop()
     assert str(edge1) == "An edge"
     assert str(edge2) == "12"
     assert str(edge3) == ""
 
 
-# pylint: disable=too-many-locals
+# pylint: disable=too-many-locals,too-many-statements
 def test_main():
     """Test tree methods and initialization."""
-    tree1 = Tree()
+    tree1 = st.Tree()
     rootid = tree1.root_id
     assert tree1.root_id is not None
     assert tree1.root_data is None
     assert tree1.parent_edge is None
-    assert Tree.nof_trees > 0
+    assert st.Tree.nof_trees > 0
     assert tree1.is_root()
     assert tree1.is_leaf()
 
@@ -72,12 +58,12 @@ def test_main():
     strlen = 40
     rnddata1 = ''.join(random.choice(string.ascii_uppercase + string.digits)
                        for _ in range(strlen))
-    tree2 = Tree(root_data=rnddata1, root_id=rndid1)
+    tree2 = st.Tree(root_data=rnddata1, root_id=rndid1)
     edge1 = tree1.add_subtree(tree2, '1', "an edge")
     assert tree2.root_id == rndid1
     assert tree2.root_data == rnddata1
     assert tree2.parent_edge == edge1
-    assert Tree.nof_trees > 1
+    assert st.Tree.nof_trees > 1
     assert not tree2.is_root()
     assert not tree1.is_leaf()
     assert tree2.is_leaf()
@@ -88,8 +74,8 @@ def test_main():
     strlen = 40
     rnddata2 = ''.join(random.choice(string.ascii_uppercase + string.digits)
                        for _ in range(strlen))
-    tree3 = Tree(root_data=rnddata2, root_id=rndid2)
-    edge2 = Edge(dst=tree3, data="another edge")
+    tree3 = st.Tree(root_data=rnddata2, root_id=rndid2)
+    edge2 = st.Edge(dst=tree3, data="another edge")
     tree1.root_edges['2'] = edge2
     assert tree3.parent_edge == edge2
     assert tree3.is_leaf()
@@ -105,7 +91,7 @@ def test_main():
     strlen = 40
     rnddata3 = ''.join(random.choice(string.ascii_uppercase + string.digits)
                        for _ in range(strlen))
-    tree4 = Tree(root_data=rnddata3, root_id=rndid3)
+    tree4 = st.Tree(root_data=rnddata3, root_id=rndid3)
     tree2.add_subtree(tree4, edge_id='3', edge_data="Last edge")
 
     assert tree1.is_root()
@@ -154,14 +140,14 @@ def test_main():
 @raises(AttributeError)
 def test_readonly_attr1():
     """Test tree readonly member variable: root_edges"""
-    tree = Tree()
+    tree = st.Tree()
     tree.root_edges = {'a': 2, 'c': 1}
 
 
 @raises(AttributeError)
 def test_readonly_attr2():
     """Test tree readonly member variable: root_id"""
-    tree = Tree()
+    tree = st.Tree()
     tree.root_id = 'new_id'
 
 

@@ -1,27 +1,25 @@
-PIP=pip
-TEST=nosetests
-TESTREPO=pypitest
-MAINREPO=pypi
+TESTPYPI=testpypi
 
 # Specifying phony targets
-.PHONY: init test dist-test dist FORCE_VERSION
+.PHONY: init test build package dist-test dist dist-clean
 
-init:
-	${PIP} install -r requirements.txt
+init: ;
 
-test:
-	${TEST}
+test: init
+	python setup.py nosetests
 
-README.rst: README.md
-	pandoc -o $@ $<
+build:
+	python setup.py build
 
-FORCE_VERSION:
-	git describe --exact-match --tags $(git log -n1 --pretty=%h) > VERSION
+package:
+	python setup.py sdist
+	python setup.py bdist_wheel
 
-dist-test: README.rst FORCE_VERSION
-	python setup.py register -r ${TESTREPO}
-	python setup.py sdist upload -r ${TESTREPO}
+dist: package
+	twine upload dist/*
 
-dist: README.rst FORCE_VERSION
-	python setup.py register -r ${MAINREPO}
-	python setup.py sdist upload -r ${MAINREPO}
+dist-test: package
+	twine upload --repository ${TESTPYPI} dist/*
+
+dist-clean:
+	rm -rf dist/ build/ *.egg-info

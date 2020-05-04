@@ -1,36 +1,20 @@
 # coding=utf-8
 
-# Suffix tree library
-#
-# The MIT License (MIT)
-#
-# Copyright (c) 2016 Ali Ghaffaari
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+"""
+    suffixtree.tree
+    ~~~~~~~~~~~~~~~
 
-"""Implement the tree data structure."""
+    Tree data structure implementation.
+
+    :copyright: (c) 2016 by Ali Ghaffaari.
+    :license: MIT, see LICENSE for more details.
+"""
 
 from collections import deque
 from graphviz import Digraph
 
 
-class Edge(object):
+class Edge:
     """Edge class.
 
     This class is used by Tree class as an edge in a tree. It implements the
@@ -80,7 +64,7 @@ class Edge(object):
                            str(self.dst.root_id))
 
 
-class Tree(object):
+class Tree:
     """Tree class.
 
     This class implements a tree data structure recursively. Each tree has some
