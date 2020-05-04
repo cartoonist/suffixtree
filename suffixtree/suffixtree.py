@@ -428,14 +428,32 @@ class SuffixTree(Tree):
         # else:
         # Finding the next suffix node and setting the active state to that node
         next_suffix = self._active.subtree.suffix_link
-        new_prefix = str(self._active)[1:]
         if next_suffix is not None:
             # Follow the suffix link...
             self._active = Substr(next_suffix)
         else:
             prev_suffix = self._active
             # Find the next suffix node...
-            self._active = Substr(self, new_prefix)
+            act_parent_edge = self._active.subtree.parent_edge
+            act_parent = act_parent_edge.src
+            i = act_parent_edge.start
+            j = act_parent_edge.end
+            if act_parent.is_root():
+                target_node = act_parent
+                i += 1
+            else:
+                target_node = act_parent.suffix_link
+            assert target_node is not None
+            while True:
+                c = self._string[i]
+                child_edge = target_node.root_edges[c]
+                if len(child_edge) > j - i:
+                    break
+                target_node = child_edge.dst
+                i += len(child_edge)
+            if j - i == 0:
+                c = None
+            self._active = Substr(target_node, edge_char=c, depth=j-i)
             # Split the edge if required.
             if not self._active.ends_on_node():
                 self._active = Substr(self._splitedge())
